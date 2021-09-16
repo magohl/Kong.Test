@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+    kong:
+        container_name: kong
+        environment:
+            # running in DB LESS mode will leave the Admin API readonly. Just the way we like it!
+            - KONG_DATABASE=            off
+            - KONG_PROXY_ACCESS_LOG=    /dev/stdout
+            - KONG_ADMIN_ACCESS_LOG=    /dev/stdout
+            - KONG_PROXY_ERROR_LOG=     /dev/stderr
+            - KONG_ADMIN_ERROR_LOG=     /dev/stderr
+            - KONG_ADMIN_LISTEN=        0.0.0.0:8001, 0.0.0.0:8444 ssl
+            - KONG_DECLARATIVE_CONFIG=  /home/kong/kong.yml
+            - KONG_HEADERS=             off
+        ports:
+            - 8000:8000
+            #- 8443:8443
+            #- 8001:8001
+            #- 8444:8444
+        volumes:
+            - './kong.yml:/home/kong/kong.yml'
+        image: kong
+    
+    #Sample upstream app - internal test API
+    whoami:
+        container_name: whoamicore
+        ports:
+            - 8899:80
+        image: magohl/whoamicore:latest

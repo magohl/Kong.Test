@@ -1,0 +1,17 @@
+### External api via kong
+GET http://localhost:8000/dog
+x-api-key: supersecret
+
+### Intental api via kong
+GET http://localhost:8000/whoami
+x-api-key: supersecret
+
+### Direct to internal api
+GET http://localhost:8899/
+
+### 401 - Wrong key
+GET http://localhost:8000/whoami
+x-api-key: wrong-key
+
+### 404 - not found
+GET http://localhost:8000/notfound
